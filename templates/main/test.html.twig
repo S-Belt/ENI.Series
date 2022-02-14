@@ -1,14 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=yes, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Series!</title>
-</head>
-<body>
+{% extends 'base.html.twig' %}  {# heritage du contenu de la base.html #}
+
+{% block body %}  {# on ecrase le block body du parent avec notre code #}
     <h1>TestTest</h1>
 
-</body>
-</html>
+<div>
+    {# cree une date #}
+    <div>{{ "now"|date('Y') }}</div> {# on affiche l'année #}
+    <div>{{ "+1year"|date('Y') }}</div> {# si on ajoute 1 année a l'annee en cours :) #}
+
+
+    {# cree une variable #}
+    {% set name="Serguei" %}
+    <h2>{{ name|upper }}</h2> {# affiche le nom en maj #}
+
+    {# cree un tableau #}
+    {% set colors= ["orange", "brown", "turquoise","blue"]%}
+    <div>Nombre de couleurs :{{ colors|length }}</div> {# affiche la taille du tableau #}
+    <div>{{ colors|join(' / ') }}</div> {# affiche les valeurs du tableau "colors" separés par un / #}
+
+    {% for color in colors %}
+        <div>{{ loop.index }}</div> {# affiche l'index de chaque couleur du tableau. on peut mettre loop.last#}
+        <div style="background-color: {{ color }}">{{ color }}</div>
+
+    {% endfor %}
+
+    {# cree un objet #}
+    {% set book={
+        title:'PifPaf',
+        year: 2000,
+        author:"John Doe"}
+    %}
+    <h3>{{ book.author }}</h3> {# affiche l'auteur depuis objet book #}
+    <div>
+        {% for key, val in book %}
+        <div>{{ key }} : {{ val }}</div> {# affiche les cles/valeurs #}
+
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}  {# on remplace le footer avec le block du parent #}
+
+{% block title %}{{ parent() }} | Test{% endblock %}
