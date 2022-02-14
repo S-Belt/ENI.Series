@@ -21,9 +21,19 @@ class MainController extends AbstractController
      * @Route ("/test", name="main_test")
      */
 
-    public function test(): Response
-    {
-        return $this->render('main/test.html.twig');
-    }
+    public function test()
 
+    {
+        {#on peut creer une nouvelle variable et faire appel a elle depuis test.html#}
+            $serie = [
+                "title" => "GAME OF THRONES",
+                "year" => "2010"
+            ];
+
+            return $this->render('main/test.html.twig', [
+                "mySerie" => $serie,
+                "autreVariable" => 'Is N°1'
+            ]);
+        }
+    }
 }
