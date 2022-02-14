@@ -6,25 +6,37 @@
           content="width=device-width, user-scalable=yes, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}Series!{% endblock %}</title>
+
+    {# pas d'Asset quand ca pointe sur un lien externe( ici le google fonts) #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@700&display=swap" rel="stylesheet">
+
+    {# ici on met les "assets" car ca reference des fichiers en local #}
+    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}"> {# normalise.css pour navigateurs #}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> {# on cree .css puis on importe la ref css #}
+
+    <link rel="icon" href="{{ asset('img/icon.png') }}">
 </head>
 <body>
-    <header>
-        <h1>SERIES!</h1>
-        {% include('inc/nav.html.twig') %} {# on 'include' notre block "nav" qu'on definit dans le dossier "inc" #}
-    </header>
+    <div class="container">
+        <header>
+            <h1><a href="{{ path('main_home') }}"><img src="{{ asset('img/logo.svg') }}" alt="SERIES!">SERIES!</a></h1>
+            {% include('inc/nav.html.twig') %} {# on 'include' notre block "nav" qu'on definit dans le dossier "inc" #}
+        </header>
 
-    <main>
-        {% block body %}{% endblock %}
-
-
-    </main>
-    <footer>
-        {% include('inc/nav.html.twig') %}
-        <div>&copy; {{ "now"|date("Y") }} SERIES!</div>
+        <main>
+            {% block body %}{% endblock %}
 
 
-    </footer>
+        </main>
+        <footer>
+            {% include('inc/nav.html.twig') %}
+            <div>&copy; {{ "now"|date("Y") }} SERIES!</div>
 
+
+        </footer>
+    </div>
 
 </body>
 </html>

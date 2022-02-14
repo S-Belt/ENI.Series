@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
@@ -20,7 +21,7 @@ class MainController extends AbstractController
      * @Route ("/test", name="main_test")
      */
 
-    public function test()
+    public function test(): Response
     {
         return $this->render('main/test.html.twig');
     }
