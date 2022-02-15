@@ -47,4 +47,21 @@ class SerieRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    //on peut aussi creer une nouvelle methode de tri avec QueryBuilder
+    public function findBestSeries()
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->andWhere('s.popularity > 100');
+        $queryBuilder->andWhere('s.vote > 8');
+        $queryBuilder->addOrderBy('s.popularity', 'DESC');
+        $query = $queryBuilder->getQuery();
+
+        $query->setMaxResults(50);
+        $results = $query->getResult();
+
+
+        return $results;
+
+    }
 }
