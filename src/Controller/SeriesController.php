@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Serie;
+use App\Form\SerieType;
 use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 
 class SeriesController extends AbstractController
@@ -48,9 +51,35 @@ class SeriesController extends AbstractController
     /**
      * @Route("/series/create", name="serie_create")
      */
-    public function create(): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('series/create.html.twig');
+        //apres avoir cree notre formulaire SerieType on commence par creer une instance de Serie
+        $serie = new Serie();
+        $serie->setDateCreated(new \DateTime());
+        
+        //ensuite une instance de notre formulaire en appelant la methode createForm
+        //type de form et on l'associe a $serie
+        $serieForm = $this->createForm(SerieType::class, $serie);
+
+        $serieForm->handleRequest($request); //la on demande d'injecter nos valeurs dans $series
+
+        if($serieForm->isSubmitted() && $serieForm->isValid()){
+
+            $entityManager->persist($serie); //enregistrer nos valeurs dans la bdd
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Serie Added');
+            return $this->redirectToRoute('serie_details', ['id' => $serie->getId()]);
+
+
+        }
+
+
+        return $this->render('series/create.html.twig', [
+            'serieForm' => $serieForm->createView() //na pas oublier de mettre le 'createwiew pour l'affichage
+        ]);
+
+
     }
 
     /**
