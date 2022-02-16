@@ -42,6 +42,12 @@ class SeriesController extends AbstractController
         //on recupere l'ID de la serie depuis la bdd
         $serie = $serieRepository->find($id);
 
+        //on verifie que la serie existe(ex. apres une suppression)
+        if(!$serie){
+            throw $this->createNotFoundException('sorry');
+        }
+
+
         //puis on passe la valeur a twig
         return $this->render('series/details.html.twig', [
             "serie" => $serie
@@ -97,9 +103,9 @@ class SeriesController extends AbstractController
         $serie->setName('HolyMoly');
         $serie->setBackdrop('dafsd');
         $serie->setPoster('dafsdf');
-        $serie->setDateCreated(new\ DateTime());
-        $serie->setFirstAirDate(new\ DateTime("-1 year"));
-        $serie->setLastAirDate(new\ DateTime("+6 month"));
+        $serie->setDateCreated(new \DateTime());
+        $serie->setFirstAirDate(new \DateTime("-1 year"));
+        $serie->setLastAirDate(new \DateTime("+6 month"));
         $serie->setGenres('drama');
         $serie->setOverview('very very good');
         $serie->setPopularity(123.00);
@@ -122,13 +128,21 @@ class SeriesController extends AbstractController
         $serie->setGenres('comedy');
         $entityManager->flush();
 
-
-
-
-        return $this->render('series/create.html.twig');
+         return $this->render('series/create.html.twig');
 
     }
 
+    /**
+     * @Route ("/serie/delete/{id}", name"series_delete")
+     */
+
+    /*public function delete(Serie $serie, EntityManagerInterface $entityManager)
+    {
+        $entityManager->remove($serie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('main_home');
+    }*/
 
 
 }

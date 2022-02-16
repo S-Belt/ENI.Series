@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Serie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,16 +53,26 @@ class SerieRepository extends ServiceEntityRepository
     public function findBestSeries()
     {
         $queryBuilder = $this->createQueryBuilder('s');
+        
+        $queryBuilder->leftJoin('s.seasons', 'seas')
+            ->addSelect('seas'); //pour qu'il fasse qu'une seule requete
+
         $queryBuilder->andWhere('s.popularity > 100');
         $queryBuilder->andWhere('s.vote > 8');
         $queryBuilder->addOrderBy('s.popularity', 'DESC');
         $query = $queryBuilder->getQuery();
 
         $query->setMaxResults(50);
-        $results = $query->getResult();
+        // $results = $query->getResult();
+        //return $results;
+
+        //en passant par paginator on recupere bien les 50 series en non 50 saisons
+        $paginator = new Paginator($query);
+        return $paginator;
 
 
-        return $results;
+
+
 
     }
 }
